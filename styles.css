@@ -1,0 +1,32 @@
+body {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+  }
+  
+  .content {
+    grid-area: content;
+  }
+  
+  .header {
+    grid-area: header;
+  }
+  
+  .footer {
+    grid-area: footer;
+  }  
+
+.wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 120px 6000px;
+  grid-template-areas:
+    'header header'
+    'sidebar content'
+    'footer  footer';
+  background-color: #fff;
+  color: #444;
+  }

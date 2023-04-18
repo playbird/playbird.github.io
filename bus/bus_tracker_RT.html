@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.marker {
+			display: block;
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+			padding: 0;
+			}
+		</style>
+	</head>
+	<!-- add your Google Maps API to line 4 after the =  -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+    <link href="./styles.css" rel="stylesheet" />
+	<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaG9yYXRpbzE5NjgiLCJhIjoiY2xnZ3h2ZWc2MGc3eTNlcG5hc3V1cmh4NiJ9.w4KYiGviL-IC7sWSQ2RtwQ';
+  </script>
+		<div id="map" style="width:1024px; height:768px"></div>
+	<script>
+		var busArray = [];
+		let map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/outdoors-v12',
+			center: [-71.104081, 42.365554],
+			zoom: 14,
+		});
+
+    async function run(){
+      const locations = await getBusData();
+      console.log(new Date());
+      console.log(locations);
+			addBuses(locations);
+
+      // timer
+      setTimeout(run, 15000);
+    }
+
+    async function getBusData(){
+      const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+      const response = await fetch(url);
+      const json = await response.json();
+      return json.data;
+    }
+
+		function addBuses(locations){
+			locations.forEach((locations) => {
+
+				let lng = locations.attributes.longitude;
+				let lat = locations.attributes.latitude;
+				let id = locations.attributes.id;
+				let dir = locations.attributes.direction_id;
+				const red = document.createElement('div');
+				red.className = 'marker';
+				red.style.backgroundImage = `./red.png/`;
+				red.style.backgroundSize = '100%';
+				const blue = document.createElement('div');
+				blue.className = 'marker';
+				blue.style.backgroundImage = `./blue.png/`;
+				blue.style.backgroundSize = '100%';
+				
+				if(dir === 0) {
+					new mapboxgl.Marker()
+      		.setLngLat([lng, lat])
+      		.addTo(map);
+				}else{
+					new mapboxgl.Marker()
+      		.setLngLat([lng, lat])
+      		.addTo(map);
+				}
+			}); 
+		}
+
+		// function addBuses(locations){
+		// 	console.log(locations[0].attributes.latitude);
+		// 	console.log(locations[0].attributes.direction_id);
+		// 	locations.forEach((locations) => {
+		// 		let dir = locations.attributes.direction_id;
+		// 		let icon = getIcon(dir);
+		// 		const iconElement = document.createElement('div');
+		// 		console.log(dir);
+		// 		iconElement.style.backgroundImage = icon;	
+		// 		var marker = new mapboxgl.Marker(iconElement)
+    //   	.setLngLat([locations.attributes.latitude, locations.attributes.longitude])
+    //   	.addTo(map);
+		// 	}); 
+		// }
+
+		// function addBus(bus){
+	
+		// 	var icon = getIcon(bus.);
+		// 	var marker = markers.find((item) => {
+		// 		if(item.id !== id){
+		// 			return marker;
+		// 		}else{
+		// 			return item.id === id;
+		// 		}
+		// 	});
+		// }
+
+		function getIcon(dir){
+		// select icon based on bus direction
+			if (dir === 0) {
+				return 'red.png';
+			}
+			return 'blue.png';	
+}
+
+		run();
+</script>
+</html>
