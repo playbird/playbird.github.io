@@ -32,7 +32,22 @@
       const locations = await getBusData();
       console.log(new Date());
       console.log(locations);
-			addBuses(locations);
+	  const mk = new mapboxgl.Marker()
+      	.setLngLat([-71.104081, 42.365554])
+      	.addTo(map);
+	  mk.remove;
+	  for (i = 0; i <= locations.length; i++){
+
+		let dir = locations[i].attributes.direction_id;
+		let marker = locations[i].attributes.id;
+		addBuses(locations[i], dir)
+		
+		// if (elMarkerDiv){
+		// 	moveMarker(marker, dir);
+		// } else {
+		// 	addBuses(locations[i], dir);
+	  	// }
+	}
 
       // timer
       setTimeout(run, 15000);
@@ -45,33 +60,45 @@
       return json.data;
     }
 
-		function addBuses(locations){
+		function addBuses(locations, dir){
 			locations.forEach((locations) => {
 
-				let lng = locations.attributes.longitude;
-				let lat = locations.attributes.latitude;
-				let id = locations.attributes.id;
-				let dir = locations.attributes.direction_id;
-				const red = document.createElement('div');
-				red.className = 'marker';
-				red.style.backgroundImage = `./red.png/`;
-				red.style.backgroundSize = '100%';
-				const blue = document.createElement('div');
-				blue.className = 'marker';
-				blue.style.backgroundImage = `./blue.png/`;
-				blue.style.backgroundSize = '100%';
-				
-				if(dir === 0) {
-					new mapboxgl.Marker()
-      		.setLngLat([lng, lat])
-      		.addTo(map);
+			 	let bus = {
+					lng: locations.attributes.longitude,
+					lat: locations.attributes.latitude,
+					id: locations.attributes.id,
+					direction_id: locations.attributes.direction_id,
+				};
+			
+				busArray.push(bus);
+
+				let elMarkerDiv = document.createElement('div');
+		
+				elMarkerDiv.className = 'marker';
+				if (dir === 0){
+					elMarkerDiv.style.backgroundImage = `url(https://github.com/playbird/portfolio/blob/d5bbd94f46e2d7f423d47f7875a788823791fa15/bus/blue.png/)`;
 				}else{
-					new mapboxgl.Marker()
-      		.setLngLat([lng, lat])
-      		.addTo(map);
+					elMarkerDiv.style.backgroundImage = `url(https://github.com/playbird/portfolio/blob/d5bbd94f46e2d7f423d47f7875a788823791fa15/bus/red.png/)`;
 				}
+				elMarkerDiv.style.backgroundSize = '100%';
+				new mapboxgl.Marker(elMarkerDiv)
+      			.setLngLat([lng, lat])
+      			.addTo(map);
+				
 			}); 
 		}
+
+		function moveMarker(marker,bus) {
+		// change icon if bus has changed direction
+			var icon = getIcon(bus);
+			marker.setIcon(icon);
+
+		// move icon to new lat/lon
+    		marker.setPosition( {
+    		lat: bus.attributes.latitude, 
+    		lng: bus.attributes.longitude
+	});
+}
 
 		// function addBuses(locations){
 		// 	console.log(locations[0].attributes.latitude);
@@ -100,14 +127,22 @@
 		// 	});
 		// }
 
-		function getIcon(dir){
-		// select icon based on bus direction
-			if (dir === 0) {
-				return 'red.png';
-			}
-			return 'blue.png';	
-}
+		// function getIcon(dir){
+		// // select icon based on bus direction
+		// 	if (dir === 0) {
+		// 		return 'red.png';
+		// 	}
+		// 	return 'blue.png';	
+ 		// }
 
+				// const red = document.createElement('div');
+				// red.className = 'marker';
+				// red.style.backgroundImage = `./red.png/`;
+				// red.style.backgroundSize = '100%';
+				// const blue = document.createElement('div');
+				// blue.className = 'marker';
+				// blue.style.backgroundImage = `./blue.png/`;
+				// blue.style.backgroundSize = '100%';
 		run();
 </script>
 </html>

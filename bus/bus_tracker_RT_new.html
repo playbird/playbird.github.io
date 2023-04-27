@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+		</style>
+	</head>
+	<!-- add your Google Maps API to line 4 after the =  -->
+	<meta name='viewport' content='width=device-width, initial-scale=1' />
+  
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="./styles.css" rel="stylesheet" />
+	<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaG9yYXRpbzE5NjgiLCJhIjoiY2xnZ3h2ZWc2MGc3eTNlcG5hc3V1cmh4NiJ9.w4KYiGviL-IC7sWSQ2RtwQ';
+		
+  </script>
+		<div id="map" style="width:1024px; height:768px"></div>
+		
+	<script>
+	
+		var markers = [];
+		var busArray = [];
+		let map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/outdoors-v12',
+			center: [-71.104081, 42.365554],
+			zoom: 14,
+		});
+		
+		map.on('load', run);
+
+    async function run(){
+      const locations = await getBusData();
+      console.log(new Date());
+      console.log(locations);
+			locations.forEach(function(bus){
+			map.addSource(bus.id, {
+				'type': 'Feature',
+				'data': 'geometry',
+				'coordinates': [bus.attributes.longitude, bus.attributes.latitude]
+			})
+			map.addLayer({
+				'id': bus.id,
+				'type': 'symbol',
+				'source': bus.id,
+				'layout': {
+				// This icon is a part of the Mapbox Streets style.
+				// To view all images available in a Mapbox style, open
+				// the style in Mapbox Studio and click the "Images" tab.
+				// To add a new image to the style at runtime see
+				// https://docs.mapbox.com/mapbox-gl-js/example/add-image/
+				'icon-image': 'rocket'
+				}
+			});
+				var marker = getMarker(locations.id);		
+				if (marker){
+					moveMarker(marker,bus);
+				}
+				else {
+					addMarker(bus);			
+				}
+			});  
+
+      // timer
+      setTimeout(run, 15000);
+    }
+
+		function addMarker(bus){
+			var icon = getIcon(bus);
+			markerDiv = document.createElement('div');
+			markerDiv.className = 'marker';
+			markerDiv.style.backgroundImage = icon;
+			markerDiv.style.backgroundSize = '100%';
+			var marker = new mapboxgl.Marker(markerDiv)
+	    	.setLngLat([bus.attributes.longitude, bus.attributes.latitude])
+      	.addTo(map);
+				// markers.push(marker);
+		}
+
+    async function getBusData(){
+      const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+      const response = await fetch(url);
+      const json = await response.json();
+      return json.data;
+    }
+
+		function getIcon(bus){
+			// select icon based on bus direction
+			if (bus.attributes.direction_id === 0) {
+				return 'red.png';
+			}
+			return 'blue.png';	
+		}
+
+		function moveMarker(marker,bus) {
+		// change icon if bus has changed direction
+			var icon = getIcon(bus);
+			markerDiv.style.backgroundImage = icon;
+
+		// move icon to new lat/lon
+	    new mapboxgl.Marker(markerDiv)
+				.setLngLat([bus.attributes.longitude, bus.attributes.latitude])
+				
+		};
+
+function getMarker(id){
+	var marker = markers.find(function(item){
+		return item.id === id;
+	});
+	return marker;
+}
+
+// run();
+
+</script>
+</html>
