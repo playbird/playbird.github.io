@@ -2,10 +2,76 @@ body {
     margin: 20px;
     padding: 20px;
   }
+
+h1 {
+  font-family: tahoma, sans-serif;
+  font: 2.5em; 
+}
+
+h2 {
+  font-family: tahoma, sans-serif;
+  font: 2em;
+}
+
+h3 {
+  font-family: tahoma, sans-serif;
+  font: 1.5em;
+}
+
+h4 {
+  font-family: tahoma, sans-serif;
+  font: 1em;
+}
+
+p {
+  font-family: tahoma, sans-serif;
+  font: .75em;
+}
   
 .center {
   text-align: center;
 }
+
+iframe {
+  display: block;
+  margin: 0 auto;
+  top: 200px;
+  left: 100 px;
+}
+
+video.center {
+
+  display: block;
+  
+  margin-left: auto;
+  
+  margin-right: auto;
+  
+  }
+
+a:link {
+  color: black;
+  text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+  color: black;
+  text-decoration: none;
+} 
+
+/* mouse over link */
+a:hover {
+  color: blue;
+  background-color: white;
+}
+
+/* selected link */
+a:active {
+  color: blue;
+  background-color: white;
+}
+
   .projectcontainer {  display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -39,7 +105,7 @@ body {
 
 .Sidebar { grid-area: Sidebar; padding: 5px 10px; border-radius: 2%;}
 
-.Main { grid-area: Main; padding: 5px 5px; border-radius: 2%;}
+.Main { grid-area: Main; padding: 20px 5px; border-radius: 2%;}
 
 .Footer { grid-area: Footer; border-radius: 2%;}
 

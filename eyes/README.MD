@@ -1,10 +1,9 @@
-Real Time Bus Tracker
+The eyes exercise is a pair of "eyes" that follow your mouse as you move it around the screen. Simply move your mouse around the screen and watch the iris' follow!
 
-This project tracks the progress of a bus between MIT and Harvard.
+Next steps:
 
-To run this project, open the index.html and observe the busses running between routes. Select a different route by clicking the appropriate button.
-
-Future enhancements will add more busses.
+1. create an option to change the color of the eyeball, perhaps make it a separate pupil and iris.
+2. chang the background color.
 
 Copyright 2023 MIT, James Christensen
 
